@@ -4,7 +4,7 @@ Kegels
 
 [Kegel exercises](https://en.wikipedia.org/wiki/Kegel_exercise) are exercises for strengthening the pelvic-floor muscles.
 
-This repo intends to provided a way to do them in a guided way. E.g:
+With this repo you can do them in a guided way. E.g:
 - Hold for N seconds, release for M...
 - Go on holding tighter for the length of N seconds... Then keep it fully held for another N seconds... Then go releasing slowly for N seconds... Then keep it fully released for N seconds...
 
