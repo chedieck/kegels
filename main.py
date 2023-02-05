@@ -95,14 +95,13 @@ def rest(segundos=20):
     clear()
 
 
-def yield_seconds(state, total=30):
+def yield_seconds(total=30):
     for i in range(total, 0, -1):
         yield f" ({i}s remaining)", i
 
 
-def _run_set(total=None, step=None, i=None, state=None):
-    for message, remaining_time in yield_seconds(state=state,
-                                                 total=step):
+def _run_set(total, step, i, state):
+    for message, remaining_time in yield_seconds(total=step):
         elapsed_text = f"{message} (elapsed: {i*step + (step -remaining_time):^5}s/{total})"
         print(KegelState.format_text(state, elapsed_text), end='\r')
         sleep(1)
