@@ -4,43 +4,43 @@ import os
 
 
 class KegelState:
-    SEGURA = 1
-    SOLTA = 2
-    CONTRAINDO = 3
-    CONTRAIDO = 4
-    SOLTANDO = 5
-    SOLTO = 6
+    HOLD = 1
+    RELEASE = 2
+    HOLDING = 3
+    HELD = 4
+    RELEASING = 5
+    RELEASED = 6
 
-    SEGURA_TEXT = 'Segura'
-    SOLTA_TEXT = 'Solta'
-    CONTRAINDO_TEXT = 'Contraindo'
-    CONTRAIDO_TEXT = 'Contraído'
-    SOLTANDO_TEXT = 'Soltando'
-    SOLTO_TEXT = 'Solto'
+    HOLD_TEXT = 'Hold'
+    RELEASE_TEXT = 'Release'
+    HOLDING_TEXT = 'Holding'
+    HELD_TEXT = 'Held'
+    RELEASING_TEXT = 'Releasing'
+    RELEASED_TEXT = 'Released'
 
-    SEGURA_COLOR = 'red'
-    SOLTA_COLOR = 'blue'
-    CONTRAINDO_COLOR = 'cyan'
-    CONTRAIDO_COLOR = 'red'
-    SOLTANDO_COLOR = 'magenta'
-    SOLTO_COLOR = 'blue'
+    HOLD_COLOR = 'red'
+    RELEASE_COLOR = 'blue'
+    HOLDING_COLOR = 'cyan'
+    HELD_COLOR = 'red'
+    RELEASING_COLOR = 'magenta'
+    RELEASED_COLOR = 'blue'
 
     COLOR_MAP = {
-        SEGURA: SEGURA_COLOR,
-        SOLTA: SOLTA_COLOR,
-        CONTRAINDO: CONTRAINDO_COLOR,
-        CONTRAIDO: CONTRAIDO_COLOR,
-        SOLTANDO: SOLTANDO_COLOR,
-        SOLTO: SOLTO_COLOR,
+        HOLD: HOLD_COLOR,
+        RELEASE: RELEASE_COLOR,
+        HOLDING: HOLDING_COLOR,
+        HELD: HELD_COLOR,
+        RELEASING: RELEASING_COLOR,
+        RELEASED: RELEASED_COLOR,
     }
 
     TEXT_MAP = {
-        SEGURA: SEGURA_TEXT,
-        SOLTA: SOLTA_TEXT,
-        CONTRAINDO: CONTRAINDO_TEXT,
-        CONTRAIDO: CONTRAIDO_TEXT,
-        SOLTANDO: SOLTANDO_TEXT,
-        SOLTO: SOLTO_TEXT,
+        HOLD: HOLD_TEXT,
+        RELEASE: RELEASE_TEXT,
+        HOLDING: HOLDING_TEXT,
+        HELD: HELD_TEXT,
+        RELEASING: RELEASING_TEXT,
+        RELEASED: RELEASED_TEXT,
     }
 
     @classmethod
@@ -74,7 +74,7 @@ class KegelState:
 
 
 def prompt():
-    aux = input("Preparado pra começar? [Y/n]")
+    aux = input("Ready to start? [Y/n]")
     if not aux.upper() == 'N':
         for i in [3, 2, 1]:
             print(f"{i}...", end='\r')
@@ -87,17 +87,17 @@ def clear():
     print(" " * area, end='\r')
 
 
-def descanso(segundos=20):
+def rest(segundos=20):
     clear()
     for i in range(segundos, 0, -1):
-        print(f"Denscansando! ({i}s faltando)", end='\r')
+        print(f"Resting! ({i}s remaining)", end='\r')
         sleep(1)
     clear()
 
 
 def yield_seconds(state, total=30):
     for i in range(total, 0, -1):
-        yield f" ({i}s faltando)", i
+        yield f" ({i}s remaining)", i
 
 
 def _run_set(total=None, step=None, i=None, state=None):
@@ -111,12 +111,12 @@ def single(state, total=120):
     _run_set(total=total, step=total, i=0, state=state)
 
 
-def alternado(total=60, step=5):
+def alternated(total=60, step=5):
     for i in range(total // step):
         if i % 2:
-            state = KegelState.SOLTA
+            state = KegelState.RELEASE
         else:
-            state = KegelState.SEGURA
+            state = KegelState.HOLD
 
         _run_set(total=total,
                  step=step,
@@ -128,13 +128,13 @@ def alternado(total=60, step=5):
 def full_circle(total=120, step=5):
     for i in range(total // step):
         if i % 4 == 0:
-            state = KegelState.CONTRAINDO
+            state = KegelState.HOLDING
         elif i % 4 == 1:
-            state = KegelState.CONTRAIDO
+            state = KegelState.HELD
         elif i % 4 == 2:
-            state = KegelState.SOLTANDO
+            state = KegelState.RELEASING
         elif i % 4 == 3:
-            state = KegelState.SOLTO
+            state = KegelState.RELEASED
 
         _run_set(total=total, step=step, i=i, state=state)
 
@@ -145,20 +145,20 @@ def first_routine():
     # first set
     hold_time = [1, 2, 3, 5, 10]
     for h in hold_time:
-        alternado(60, h)
+        alternated(60, h)
 
     clear()
-    descanso(20)
+    rest(20)
 
     # second set
     full_circle(total=120, step=5)
-    descanso(20)
+    rest(20)
 
     # third set
-    alternado(60, 30)
+    alternated(60, 30)
 
     # fourth set
-    single(KegelState.SEGURA)
+    single(KegelState.HOLD)
 
 def second_routine():
     prompt()
@@ -166,26 +166,26 @@ def second_routine():
     # first set
     hold_time = [10]
     for h in hold_time:
-        alternado(120, h)
+        alternated(120, h)
 
     clear()
-    descanso(15)
+    rest(15)
 
     # second set
     full_circle(total=160, step=8)
-    descanso(15)
+    rest(15)
 
     # third set
-    alternado(120, 60)
+    alternated(120, 60)
 
     # fourth set
-    single(KegelState.SEGURA)
+    single(KegelState.HOLD)
 
 
 
 if __name__ == '__main__':
     # first_routine()
     second_routine()
-    single(KegelState.SEGURA)
+    single(KegelState.HOLD)
     clear()
     print("Kegels done.")
