@@ -183,8 +183,7 @@ def second_routine():
 
 
 if __name__ == '__main__':
-    # first_routine()
-    second_routine()
-    single(KegelState.HOLD)
+    first_routine()
+    # second_routine()
     clear()
     print("Kegels done.")
